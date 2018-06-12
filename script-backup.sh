@@ -26,7 +26,7 @@ DAYS_BEFORE=7
 mysqldump $DB_NAME -u $DB_USER > $BACKUP_DIR/$BACKUP_NAME
 
 #Verifique se a distribuição possui o zip e unzip instalados, 
-#caso não utilize o gerenciador de pacotes:
+#caso não, utilize o gerenciador de pacotes:
 #sudo apt-get install zip unzip
 #O comando acima serve para distribuições baseadas em Debian, 
 #caso esteja utilizando outra, utilize o gerenciador da sua versão
