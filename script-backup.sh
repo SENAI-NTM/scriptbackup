@@ -31,7 +31,7 @@ mysqldump $DB_NAME -u $DB_USER > $BACKUP_DIR/$BACKUP_NAME
 #O comando acima serve para distribuições baseadas em Debian, 
 #caso esteja utilizando outra, utilize o gerenciador da sua versão
 #Compactando em zip
-zip $BACKUP_ZIP $BACKUP_NAME
+zip $BACKUP_DIR/$BACKUP_ZIP $BACKUP_DIR/$BACKUP_NAME
 
 #Apagando Backups antigos
 /usr/bin/find $BACKUP_DIR -type f -name '*.sql' -mtime +$DAYS_BEFORE -exec rm {} \;
@@ -49,4 +49,4 @@ zip $BACKUP_ZIP $BACKUP_NAME
 #Para visualizar o ID dos diretórios disponíveis, execute o comando a seguir: ./gdrive-linux-* list
 #Lembre-se de deixar o gdrive no mesmo diretório desse Script
 
-./gdrive-linux-x64 upload --parent $DIR_ID_GDRIVE $BACKUP_ZIP
+$BACKUP_DIR/gdrive-linux-x64 upload --parent $DIR_ID_GDRIVE $BACKUP_DIR/$BACKUP_ZIP
