@@ -1,29 +1,25 @@
 #!/bin/bash
 
 #Parâmetros MySQL
-DB_NAME='teste'
+DB_NAME='sapes'
 DB_USER='root'
 DB_PASSWD='root'
 
-#Verificando se existe o arquivo .my.cnf, caso não exista, é criado
-#com os seguintes parâmetros:
-#[client]
-#password = root
-if [ ! -e ".my.cnf" ]
-then
-    echo "[client]\npassword ="$DB_PASSWD > ".my.cnf"
-fi
-
 #Parâmetros Sistema
+BACKUP_DIR_HOST = ~/dev/backup
+BACKUP_DIR_GUEST = /var/backups
+LARADOCK = '~/dev/sapes-api/laradock'
+DIR_ID_GDRIVE=1Zi0YdJCIS9seqlUm-SB1TUDOnUUCzpWQ
 DATE=`date +%Y-%m-%d-%T`
-BACKUP_DIR=/home/ntm
 BACKUP_NAME=$DATE-$DB_NAME.sql
 BACKUP_ZIP=$DATE-$DB_NAME.zip
-DIR_ID_GDRIVE=1HXZnUyvabusqilvAWiyTIyqNTr4hFHLZ
 DAYS_BEFORE=7
 
+
 #Gerando arquivo .sql
-mysqldump $DB_NAME -u $DB_USER > $BACKUP_DIR/$BACKUP_NAME
+cd LARADOCK
+docker-compose exec mysql sh -c "/usr/bin/mysqldump -u $DB_USER --password=$DB_PASSWD $DB_NAME > $BACKUP_DIR_GUEST/$BACKUP_NAME"
+docker cp "$(&& docker-compose ps -q mysql)":$BACKUP_DIR_GUEST/$BACKUP_NAME $BACKUP_DIR_HOST/
 
 #Verifique se a distribuição possui o zip e unzip instalados, 
 #caso não, utilize o gerenciador de pacotes:
@@ -31,7 +27,7 @@ mysqldump $DB_NAME -u $DB_USER > $BACKUP_DIR/$BACKUP_NAME
 #O comando acima serve para distribuições baseadas em Debian, 
 #caso esteja utilizando outra, utilize o gerenciador da sua versão
 #Compactando em zip
-zip $BACKUP_DIR/$BACKUP_ZIP $BACKUP_DIR/$BACKUP_NAME
+zip $BACKUP_DIR_HOST/$BACKUP_ZIP $BACKUP_DIR/$BACKUP_NAME
 
 #Apagando Backups antigos
 /usr/bin/find $BACKUP_DIR -type f -name '*.sql' -mtime +$DAYS_BEFORE -exec rm {} \;
@@ -49,4 +45,4 @@ zip $BACKUP_DIR/$BACKUP_ZIP $BACKUP_DIR/$BACKUP_NAME
 #Para visualizar o ID dos diretórios disponíveis, execute o comando a seguir: ./gdrive-linux-* list
 #Lembre-se de deixar o gdrive no mesmo diretório desse Script
 
-$BACKUP_DIR/gdrive-linux-x64 upload --parent $DIR_ID_GDRIVE $BACKUP_DIR/$BACKUP_ZIP
+$BACKUP_DIR/gdrive upload --parent $DIR_ID_GDRIVE $BACKUP_DIR/$BACKUP_ZIP
