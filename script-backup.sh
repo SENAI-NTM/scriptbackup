@@ -6,9 +6,9 @@ DB_USER='root'
 DB_PASSWD='root'
 
 #Parâmetros Sistema
-BACKUP_DIR_HOST = ~/dev/backup
-BACKUP_DIR_GUEST = /var/backups
-LARADOCK = '~/dev/sapes-api/laradock'
+BACKUP_DIR_HOST=~/dev/backup
+BACKUP_DIR_GUEST=/var/backups
+LARADOCK='~/dev/sapes-api/laradock'
 DIR_ID_GDRIVE=1Zi0YdJCIS9seqlUm-SB1TUDOnUUCzpWQ
 DATE=`date +%Y-%m-%d-%T`
 BACKUP_NAME=$DATE-$DB_NAME.sql
