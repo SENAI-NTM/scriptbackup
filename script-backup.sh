@@ -17,9 +17,9 @@ DAYS_BEFORE=7
 
 
 #Gerando arquivo .sql
-cd LARADOCK
+cd $LARADOCK
 docker-compose exec mysql sh -c "/usr/bin/mysqldump -u $DB_USER --password=$DB_PASSWD $DB_NAME > $BACKUP_DIR_GUEST/$BACKUP_NAME"
-docker cp "$(&& docker-compose ps -q mysql)":$BACKUP_DIR_GUEST/$BACKUP_NAME $BACKUP_DIR_HOST/
+docker cp "$(docker-compose ps -q mysql)":$BACKUP_DIR_GUEST/$BACKUP_NAME $BACKUP_DIR_HOST/
 
 #Verifique se a distribuição possui o zip e unzip instalados, 
 #caso não, utilize o gerenciador de pacotes:
@@ -27,11 +27,11 @@ docker cp "$(&& docker-compose ps -q mysql)":$BACKUP_DIR_GUEST/$BACKUP_NAME $BAC
 #O comando acima serve para distribuições baseadas em Debian, 
 #caso esteja utilizando outra, utilize o gerenciador da sua versão
 #Compactando em zip
-zip $BACKUP_DIR_HOST/$BACKUP_ZIP $BACKUP_DIR/$BACKUP_NAME
+zip $BACKUP_DIR_HOST/$BACKUP_ZIP $BACKUP_DIR_HOST/$BACKUP_NAME
 
 #Apagando Backups antigos
-/usr/bin/find $BACKUP_DIR -type f -name '*.sql' -mtime +$DAYS_BEFORE -exec rm {} \;
-/usr/bin/find $BACKUP_DIR -type f -name '*.zip' -mtime +$DAYS_BEFORE -exec rm {} \;
+/usr/bin/find $BACKUP_DIR_HOST -type f -name '*.sql' -mtime +$DAYS_BEFORE -exec rm {} \;
+/usr/bin/find $BACKUP_DIR_HOST -type f -name '*.zip' -mtime +$DAYS_BEFORE -exec rm {} \;
 
 #Enviando arquivo zip para o Google Drive
 #Para o envio de arquivos para o Drive funcionar, é necessária a instalação de um software de terceiro
@@ -45,4 +45,4 @@ zip $BACKUP_DIR_HOST/$BACKUP_ZIP $BACKUP_DIR/$BACKUP_NAME
 #Para visualizar o ID dos diretórios disponíveis, execute o comando a seguir: ./gdrive-linux-* list
 #Lembre-se de deixar o gdrive no mesmo diretório desse Script
 
-$BACKUP_DIR/gdrive upload --parent $DIR_ID_GDRIVE $BACKUP_DIR/$BACKUP_ZIP
+$BACKUP_DIR_HOST/gdrive upload --parent $DIR_ID_GDRIVE $BACKUP_DIR_HOST/$BACKUP_ZIP
