@@ -2,8 +2,8 @@
 
 #Parâmetros MySQL
 DB_NAME='sapes'
-DB_USER='root'
-DB_PASSWD='root'
+DB_USER=''
+DB_PASSWD=''
 
 #Parâmetros Sistema
 BACKUP_DIR_HOST=~/dev/backup
@@ -15,16 +15,17 @@ BACKUP_NAME=$DATE-$DB_NAME.sql
 BACKUP_ZIP=$DATE-$DB_NAME.zip
 DAYS_BEFORE=7
 
-
 #Gerando arquivo .sql
 cd $LARADOCK
-docker-compose exec mysql sh -c "/usr/bin/mysqldump -u $DB_USER --password=$DB_PASSWD $DB_NAME > $BACKUP_DIR_GUEST/$BACKUP_NAME"
-docker cp "$(docker-compose ps -q mysql)":$BACKUP_DIR_GUEST/$BACKUP_NAME $BACKUP_DIR_HOST/
 
-#Verifique se a distribuição possui o zip e unzip instalados, 
+/usr/local/bin/docker-compose exec -d mysql sh -c "/usr/bin/mysqldump -u $DB_USER --password=$DB_PASSWD $DB_NAME > $BACKUP_DIR$"
+sleep 30
+/usr/local/bin/docker cp "$(docker-compose ps -q mysql)":$BACKUP_DIR_GUEST/$BACKUP_NAME $BACKUP_DIR_HOST/
+
+#Verifique se a distribuição possui o zip e unzip instalados,
 #caso não, utilize o gerenciador de pacotes:
 #sudo apt-get install zip unzip
-#O comando acima serve para distribuições baseadas em Debian, 
+#O comando acima serve para distribuições baseadas em Debian,
 #caso esteja utilizando outra, utilize o gerenciador da sua versão
 #Compactando em zip
 zip $BACKUP_DIR_HOST/$BACKUP_ZIP $BACKUP_DIR_HOST/$BACKUP_NAME
@@ -40,7 +41,7 @@ zip $BACKUP_DIR_HOST/$BACKUP_ZIP $BACKUP_DIR_HOST/$BACKUP_NAME
 #com o comando ./gdrive-linux-* about (substitua o * pela sua versão linux utilizada).
 #Acesse o link no seu browser, clique em "Allow" e cole o código de verificação no terminal.
 #Documentação disponível no próprio repositório.
-#A variável $DIR_ID_GDRIVE recebe como parâmetro o ID do diretório que você deseja enviar o arquivo, se desejar 
+#A variável $DIR_ID_GDRIVE recebe como parâmetro o ID do diretório que você deseja enviar o arquivo, se desejar
 #deixar na raiz remova o parâmetro --parent $DIR_ID_GDRIVE
 #Para visualizar o ID dos diretórios disponíveis, execute o comando a seguir: ./gdrive-linux-* list
 #Lembre-se de deixar o gdrive no mesmo diretório desse Script
