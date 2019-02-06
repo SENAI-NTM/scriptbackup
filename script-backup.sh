@@ -46,7 +46,6 @@ zip $BACKUP_DIR_HOST/$BACKUP_ZIP $BACKUP_DIR_HOST/$BACKUP_NAME
 #deixar na raiz remova o parâmetro --parent $DIR_ID_GDRIVE
 #Para visualizar o ID dos diretórios disponíveis, execute o comando a seguir: ./gdrive-linux-* list
 #Lembre-se de deixar o gdrive no mesmo diretório desse Script
-/usr/local/bin/docker-compose exec -d mysql sh -c "cd /var/backups && ls"
-docker-compose exec -d mysql sh -c "cd /var/backups && rm *.sql"
+/usr/local/bin/docker-compose exec -d mysql sh -c "cd /var/backups && rm *.sql"
 
 $BACKUP_DIR_HOST/gdrive upload --parent $DIR_ID_GDRIVE $BACKUP_DIR_HOST/$BACKUP_ZIP
