@@ -18,7 +18,7 @@ DAYS_BEFORE=7
 #Gerando arquivo .sql
 cd $LARADOCK
 
-/usr/local/bin/docker-compose exec -d mysql sh -c "/usr/bin/mysqldump -u $DB_USER --password=$DB_PASSWD $DB_NAME > $BACKUP_DIR_GUEST"
+/usr/local/bin/docker-compose exec -d mysql sh -c "/usr/bin/mysqldump -u $DB_USER --password=$DB_PASSWD $DB_NAME > $BACKUP_DIR_GUEST/$BACKUP_NAME"
 sleep 30
 /usr/local/bin/docker cp "$(docker-compose ps -q mysql)":$BACKUP_DIR_GUEST/$BACKUP_NAME $BACKUP_DIR_HOST/
 
